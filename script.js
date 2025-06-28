@@ -58,9 +58,12 @@ const GameController = () => {
   return { playRound };
 };
 
-const game = GameController();
-game.playRound(0);
-game.playRound(1);
-game.playRound(4);
-game.playRound(2);
-game.playRound(8);
+xSVG = '<img src="icons/alpha-x.svg" alt="X" />';
+oSVG = '<img src="icons/circle-outline (1).svg" alt="X" />';
+const grids = document.querySelectorAll(".grid");
+
+grids.forEach((grid) => {
+  grid.addEventListener("click", () => {
+    grid.innerHTML = oSVG;
+  });
+});
