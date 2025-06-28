@@ -47,6 +47,7 @@ const GameController = () => {
     board.makemove(currentPlayer.symbol, square);
     const boardState = board.getBoard();
 
+    console.log(boardState);
     if (checkWinner(boardState, currentPlayer.symbol)) {
       console.log(`${currentPlayer.name} wins!`);
       return;
@@ -55,8 +56,12 @@ const GameController = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
 
-  return { playRound };
+  const getCurrentPlayer = () => currentPlayer;
+
+  return { playRound, getCurrentPlayer };
 };
+
+const controller = GameController();
 
 xSVG = '<img src="icons/alpha-x.svg" alt="X" />';
 oSVG = '<img src="icons/circle-outline (1).svg" alt="X" />';
@@ -64,6 +69,12 @@ const grids = document.querySelectorAll(".grid");
 
 grids.forEach((grid) => {
   grid.addEventListener("click", () => {
-    grid.innerHTML = oSVG;
+    const square = parseInt(grid.id);
+    if (grid.innerHTML !== "") {
+      return;
+    }
+    const currentPlayer = controller.getCurrentPlayer();
+    controller.playRound(square);
+    grid.innerHTML = currentPlayer.symbol === "X" ? xSVG : oSVG;
   });
 });
