@@ -54,13 +54,12 @@ const GameController = () => {
 
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
-
-  return { playRound };
 };
 
+// Example usage:
 const game = GameController();
-game.playRound(0);
-game.playRound(1);
-game.playRound(4);
-game.playRound(2);
-game.playRound(8);
+game.playRound(0); // Bob
+game.playRound(1); // Alice
+game.playRound(4); // Bob
+game.playRound(2); // Alice
+game.playRound(8); // Bob wins!
