@@ -16,7 +16,11 @@ const Gameboard = () => {
 
   const getBoard = () => [...gameboard];
 
-  return { makemove, getBoard };
+  const reset = () => {
+    gameboard = Array(9).fill(null);
+  };
+
+  return { makemove, getBoard, reset };
 };
 
 const GameController = () => {
@@ -25,6 +29,11 @@ const GameController = () => {
   const board = Gameboard();
 
   let currentPlayer = player1;
+
+  const reset = () => {
+    board.reset();
+    currentPlayer = player1;
+  };
 
   const winPatterns = [
     [0, 1, 2],
@@ -43,13 +52,34 @@ const GameController = () => {
     );
   };
 
+  const checkTie = (boardState) => {
+    return boardState.every((square) => square !== null);
+  };
+
   const playRound = (square) => {
     board.makemove(currentPlayer.symbol, square);
     const boardState = board.getBoard();
 
     console.log(boardState);
     if (checkWinner(boardState, currentPlayer.symbol)) {
-      console.log(`${currentPlayer.name} wins!`);
+      const dialog = document.getElementById("resultDialog");
+      const message = document.getElementById("resultMessage");
+
+      message.textContent = `${currentPlayer.name} wins!`;
+      dialog.showModal();
+
+      return;
+    }
+
+    if (
+      !checkWinner(boardState, currentPlayer.symbol) &&
+      checkTie(boardState)
+    ) {
+      const dialog = document.getElementById("resultDialog");
+      const message = document.getElementById("resultMessage");
+
+      message.textContent = `It's a tie!`;
+      dialog.showModal();
       return;
     }
 
@@ -58,8 +88,16 @@ const GameController = () => {
 
   const getCurrentPlayer = () => currentPlayer;
 
-  return { playRound, getCurrentPlayer };
+  return { playRound, getCurrentPlayer, reset };
 };
+
+restartBtn.addEventListener("click", () => {
+  document.querySelectorAll(".grid").forEach((cell) => {
+    cell.innerHTML = "";
+  });
+
+  controller.reset();
+});
 
 const controller = GameController();
 
